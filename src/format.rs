@@ -59,13 +59,20 @@ pub fn format_chances(hour: &serde_json::Value, lang: &Lang) -> String {
 }
 
 pub fn format_ampm_time(day: &serde_json::Value, key: &str, ampm: bool) -> String {
-    if ampm {
-        day["astronomy"][0][key].as_str().unwrap().to_string()
-    } else {
-        NaiveTime::parse_from_str(day["astronomy"][0][key].as_str().unwrap(), "%I:%M %p")
-            .unwrap()
-            .format("%H:%M")
-            .to_string()
+    let raw_time = day["astronomy"][0][key].as_str().unwrap();
+ 
+    match NaiveTime::parse_from_str(raw_time, "%I:%M %p") {
+        Ok(parsed_time) =>  {
+            if ampm  {
+                raw_time.to_string()
+            }
+            else {
+                parsed_time.format("%H:%M").to_string()
+            }
+        }
+        Err(_) => {
+            raw_time.to_string()
+        }
     }
 }
 

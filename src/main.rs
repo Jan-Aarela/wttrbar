@@ -6,7 +6,7 @@ use std::process::exit;
 use std::thread;
 use std::time::{Duration, SystemTime};
 
-use chrono::{Local, Locale, NaiveDate, NaiveTime, Timelike};
+use chrono::{Local, Locale, NaiveDate, NaiveTime, Timelike, Datelike};
 use clap::Parser;
 use reqwest::blocking::Client;
 use serde_json::{json, Value};
@@ -231,20 +231,61 @@ fn main() {
             min_temp
         );
 
+        let sunrise = format_ampm_time(day, "sunrise", args.ampm);
+        let sunset = format_ampm_time(day, "sunset", args.ampm);
+
         let moon_phase = day["astronomy"][0]["moon_phase"].as_str().unwrap_or("");
         let moon_illumination = day["astronomy"][0]["moon_illumination"]
             .as_str()
             .unwrap_or("?");
+        
 
-        tooltip += &format!(
-            "{} {} {} {} {} {}%\n",
-            if args.nerd { "󰖜" } else { "🌅" },
-            format_ampm_time(day, "sunrise", args.ampm),
-            if args.nerd { "󰖛" } else { "🌇" },
-            format_ampm_time(day, "sunset", args.ampm),
-            format_moon_phase_icon(moon_phase, args.nerd),
-            moon_illumination
-        );
+        if  sunrise == "No sunrise" {
+            tooltip += &format!(
+                "{} {} {} {}%\n",
+                if args.nerd { "󰖜" } else { "🌇" },
+                lang.sun_doesnt_rise(),
+                format_moon_phase_icon(moon_phase, args.nerd),
+                moon_illumination
+            );
+        }
+
+        else if  sunset == "No sunset" {
+            tooltip += &format!(
+                "{} {} {} {}%\n",
+                if args.nerd { "󰖜" } else { "🌅" },
+                lang.sun_doesnt_set(),
+                format_moon_phase_icon(moon_phase, args.nerd),
+                moon_illumination
+            );
+        }
+
+        else if  sunset == sunrise {
+                tooltip += &format!(
+                    "{} {} {} {}%\n",
+                    if args.nerd { "󰖜" } else { "🌅" },
+                    if chrono::Local::now().month() >= 4 && chrono::Local::now().month() <= 8 {
+                        lang.sun_doesnt_set()
+                    } 
+                    else {
+                        lang.sun_doesnt_rise()
+                    },
+                    format_moon_phase_icon(moon_phase, args.nerd),
+                    moon_illumination
+                );
+        }
+
+        else {
+            tooltip += &format!(
+                "{} {} {} {} {} {}%\n",
+                if args.nerd { "󰖜" } else { "🌅" },
+                sunrise,
+                if args.nerd { "󰖛" } else { "🌇" },
+                sunset,
+                format_moon_phase_icon(moon_phase, args.nerd),
+                moon_illumination
+            );
+        }
 
         for hour in day["hourly"].as_array().unwrap() {
             let hour_time = hour["time"].as_str().unwrap();

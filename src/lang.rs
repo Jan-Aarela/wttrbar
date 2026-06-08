@@ -353,6 +353,53 @@ impl Lang {
             Self::GA => "Gaoth".to_string(),
         }
     }
+
+    pub fn sun_doesnt_set(&self) -> String {
+        match &self {
+            Self::EN => "Sun doesn't set".to_string(),
+            Self::DE => "Sonne geht nicht unter".to_string(),
+            Self::PL => "Słońce nie zachodzi".to_string(),
+            Self::RU => "Солнце не заходит".to_string(),
+            Self::TR => "Güneş batmıyor".to_string(),
+            Self::FR => "Le soleil ne se couche pas".to_string(),
+            Self::BE => "Сонца не захадзіць".to_string(),
+            Self::ZH => "太阳不落".to_string(),
+            Self::ES => "El sol no se pone".to_string(),
+            Self::PT => "O sol não se põe".to_string(),
+            Self::IT => "Il sole non tramonta".to_string(),
+            Self::JA => "日は沈まない".to_string(),
+            Self::UK => "Сонце не заходить".to_string(),
+            Self::SV => "Solen går inte ner".to_string(),
+            Self::DA => "Solen går ikke ned".to_string(),
+            Self::CS => "Slunce nezapadá".to_string(),
+            Self::SK => "Slnce nezapadá".to_string(),
+            Self::GA => "Ní luíonn an ghrian".to_string(),
+        }
+    }
+
+    pub fn sun_doesnt_rise(&self) -> String {
+        match &self {
+            Self::EN => "Sun doesn't rise".to_string(),
+            Self::DE => "Sonne geht nicht auf".to_string(),
+            Self::PL => "Słońce nie wschodzi".to_string(),
+            Self::RU => "Солнце не встает".to_string(),
+            Self::TR => "Güneş doğmuyor".to_string(),
+            Self::FR => "Le soleil ne se lève pas".to_string(),
+            Self::BE => "Сонца не ўзыходзіць".to_string(),
+            Self::ZH => "太阳不升".to_string(),
+            Self::ES => "El sol no sale".to_string(),
+            Self::PT => "O sol não nasce".to_string(),
+            Self::IT => "Il sole non sorge".to_string(),
+            Self::JA => "日は昇らない".to_string(),
+            Self::UK => "Сонце не сходить".to_string(),
+            Self::SV => "Solen går inte upp".to_string(),
+            Self::DA => "Solen går ikke op".to_string(),
+            Self::CS => "Slunce nevychází".to_string(),
+            Self::SK => "Slnce nevychádza".to_string(),
+            Self::GA => "Ní éiríonn an ghrian".to_string(),
+        }
+    }
+
     /// Candidate keys (in priority order) under which wttr.in may expose the
     /// localized weather description for this language. wttr.in currently
     /// returns it under the literal key `lang_xx` for every non-English
